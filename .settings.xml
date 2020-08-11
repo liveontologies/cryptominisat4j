@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.1.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd">
+
+	<servers>
+		<server>
+			<id>ossrh</id>
+			<username>${env.OSSRH_USERNAME}</username>
+			<password>${env.OSSRH_PASSWORD}</password>
+		</server>
+	</servers>
+
+	<profiles>
+		<profile>
+			<id>ossrh</id>
+			<properties>
+				<altSnapshotDeploymentRepository>ossrh::default::https://oss.sonatype.org/content/repositories/snapshots</altSnapshotDeploymentRepository>
+				<altReleaseDeploymentRepository>ossrh::default::https://oss.sonatype.org/service/local/staging/deploy/maven2/</altReleaseDeploymentRepository>
+			</properties>
+			<repositories>
+				<repository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+					<releases>
+						<enabled>false</enabled>
+					</releases>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+					<releases>
+						<enabled>false</enabled>
+					</releases>
+				</pluginRepository>
+			</pluginRepositories>
+		</profile>
+	</profiles>
+
+	<activeProfiles>
+		<activeProfile>ossrh</activeProfile>
+	</activeProfiles>
+
+</settings>

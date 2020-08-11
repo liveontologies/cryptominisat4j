@@ -1,0 +1,54 @@
+language: java
+git:
+   depth: 3
+jobs:
+   include:
+   -  stage: native-libs
+      os: linux
+      dist: trusty
+      jdk: oraclejdk8
+      env: DEPLOY=true
+   -  os: linux
+      dist: bionic
+      jdk: oraclejdk11
+      addons:
+         apt:
+            packages: mingw-w64
+      env:
+      - DEPLOY=true
+      - OPTIONS="-Pi686-w64-mingw32 -pl !cryptominisat4j"
+   -  os: linux
+      dist: bionic
+      jdk: oraclejdk11
+      addons:
+         apt:
+            packages: mingw-w64
+      env:
+      - DEPLOY=true
+      - OPTIONS="-Px86_64-w64-mingw32 -pl !cryptominisat4j"
+   -  os: osx
+      jdk: oraclejdk11
+      env: DEPLOY=true
+   -  stage: multi-platform
+      os: linux
+      jdk: oraclejdk11
+      env: OPTIONS='-Dmulti-platform -pl !cryptominisat'
+   -  os: osx
+      osx_image: xcode9.3
+      jdk: oraclejdk8
+      env: OPTIONS='-Dmulti-platform -pl !cryptominisat'
+   -  if: (NOT type IN (pull_request)) AND (branch = master)
+      before_install: skip
+      install: skip
+      script:
+      - |
+         curl -LO --retry 3 https://gist.githubusercontent.com/ykazakov/33a86f5055888342f6a32d829fc02fa9/raw/9681f17d477ea519e3630db69eaed393c0222cce/trigger-appveyor.sh  && sh trigger-appveyor.sh --branch $TRAVIS_BRANCH ykazakov cryptominisat4j $APPVEYOR_BEARER_TOKEN
+      after_success: skip
+cache:
+   directories:
+   - $HOME/.m2
+before_install: mkdir -p ~/.m2 && cp .settings.xml ~/.m2/settings.xml
+install: mvn install -DskipTests=true -U $OPTIONS
+script: mvn test -Dassembly.skipAssembly=true -B $OPTIONS -pl '!cryptominisat'
+after_success:
+- test "$DEPLOY" = true -a "$TRAVIS_PULL_REQUEST" = false && mvn source:jar deploy -DskipTests=true -B $OPTIONS
