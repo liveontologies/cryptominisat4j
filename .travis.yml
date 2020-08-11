@@ -37,7 +37,7 @@ jobs:
       osx_image: xcode9.3
       jdk: oraclejdk8
       env: OPTIONS='-Dmulti-platform -pl !cryptominisat'
-   -  if: (NOT type IN (pull_request)) AND (branch = master)
+   -  if: NOT type IN (pull_request)
       before_install: skip
       install: skip
       script:
