@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>ipasir4j-build-helper</artifactId>
+		<groupId>com.github.liveontologies</groupId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>cryptominisat4j-parent</artifactId>
+	<version>5.8.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Configuration settings for the CryptoMiniSat solver</name>
+
+	<modules>
+		<module>cryptominisat</module>
+		<module>cryptominisat4j</module>
+	</modules>
+
+	<properties>
+		<library.name>cryptominisat</library.name>
+		<library.version>5.8.0</library.version>
+		<library.download.url>https://github.com/msoos/cryptominisat/archive/</library.download.url>
+		<library.archive.name>44a08960b14a71e6c4981cfbb1f2f7e039808d49</library.archive.name>
+	</properties>
+
+	<url>https://github.com/liveontologies/${project.artifactId}</url>
+
+	<scm>
+		<connection>scm:git:https://github.com/liveontologies/${project.artifactId}.git</connection>
+		<developerConnection>scm:git:git@github.com:liveontologies/${project.artifactId}.git</developerConnection>
+		<url>https://github.com/liveontologies/${project.artifactId}</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<organization>
+		<name>Live Ontologies Project</name>
+		<url>https://github.com/liveontologies</url>
+	</organization>
+
+	<inceptionYear>2020</inceptionYear>
+
+	<developers>
+		<developer>
+			<id>yevgeny</id>
+			<name>Yevgeny Kazakov</name>
+			<email>yevgeny.kazakov@uni-ulm.de</email>
+			<organization>Institute of Artificial Intelligence, University of Ulm</organization>
+			<organizationUrl>http://www.uni-ulm.de/en/in/ki.html</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>1</timezone>
+		</developer>
+	</developers>
+
+</project>

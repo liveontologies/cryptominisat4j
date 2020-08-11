@@ -1,0 +1,108 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.github.liveontologies</groupId>
+		<artifactId>cryptominisat4j-parent</artifactId>
+		<version>5.8.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>cryptominisat4j</artifactId>
+
+	<name>Java bindings for the CryptoMiniSat solver</name>
+	<description>Accessing the native CryptoMiniSat solver throught IPASIR interface and its Java binding</description>
+
+	<properties>
+		<ipasir.artifactId>cryptominisat</ipasir.artifactId>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>ipasir4j-model</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>ipasir4j-jna</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>ipasir4j-tests</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>${ipasir.artifactId}</artifactId>
+			<version>${project.version}</version>
+			<classifier>${jna.os.prefix}</classifier>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<!-- List all platforms for which native libraries were compiled -->
+		<profile>
+			<id>multi-platform</id>
+			<activation>
+				<!-- in dependent projects can be only activated by a property -->
+				<property>
+					<name>multi-platform</name>
+				</property>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>${project.groupId}</groupId>
+					<artifactId>${ipasir.artifactId}</artifactId>
+					<version>${project.version}</version>
+					<classifier>darwin</classifier>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>${project.groupId}</groupId>
+					<artifactId>${ipasir.artifactId}</artifactId>
+					<version>${project.version}</version>
+					<classifier>linux-x86-64</classifier>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>${project.groupId}</groupId>
+					<artifactId>${ipasir.artifactId}</artifactId>
+					<version>${project.version}</version>
+					<classifier>win32-x86-64</classifier>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>${project.groupId}</groupId>
+					<artifactId>${ipasir.artifactId}</artifactId>
+					<version>${project.version}</version>
+					<classifier>win32-x86</classifier>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack-native-libraries</id>
+						<configuration>
+							<includeArtifactIds>${ipasir.artifactId}</includeArtifactIds>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
