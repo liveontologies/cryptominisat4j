@@ -11,7 +11,7 @@
 	</parent>
 
 	<artifactId>cryptominisat4j-parent</artifactId>
-	<version>5.8.0.1-SNAPSHOT</version>
+	<version>5.7.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Configuration settings for the CryptoMiniSat solver</name>
@@ -23,9 +23,9 @@
 
 	<properties>
 		<library.name>cryptominisat</library.name>
-		<library.version>5.8.0</library.version>
+		<library.version>5.7.1</library.version>
 		<library.download.url>https://github.com/msoos/cryptominisat/archive/</library.download.url>
-		<library.archive.name>44a08960b14a71e6c4981cfbb1f2f7e039808d49</library.archive.name>
+		<library.archive.name>f38684e4568ab10dd56c1a179f57fb49e81d5730</library.archive.name>
 	</properties>
 
 	<url>https://github.com/liveontologies/${project.artifactId}</url>
