@@ -1,20 +1,20 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Build Status](https://travis-ci.com/liveontologies/cryptominisat4j.svg?branch=master)](https://travis-ci.com/liveontologies/cryptominisat4j)
-[![Build status](https://ci.appveyor.com/api/projects/status/69ajaabl9m1a4poi?svg=true)](https://ci.appveyor.com/project/ykazakov/cryptominisat4j)
+[![Build status](https://ci.appveyor.com/api/projects/status/1d8vtsylcs4u5r5o?svg=true)](https://ci.appveyor.com/project/ykazakov/cryptominisat4j)
 
 # cryptominisat4j
 
-Accessing the native CryptoMiniSat SAT solver throught IPASIR interface and its Java binding
+Accessing the native CryptoMiniSat SAT solver through IPASIR interface and its Java binding
 
-This project packages native shared libraries of 
+This project packages native shared libraries of the
 [CryptoMiniSat SAT solver](https://github.com/msoos/cryptominisat) so that they can be
 used in Apache Maven projects.
 
 ## Overview and usage
 
-This project contains of two modules:
+This project consists of two modules:
 
-- **cryptominisat**: This module contains precomiled native shared libraries that implement the 
+- **cryptominisat**: This module contains precompiled native shared libraries that implement the 
   [Reentrant Incremental Sat solver API (reverse: IPASIR)](https://github.com/biotomas/ipasir)
   used in [SAT competitions](http://www.satcompetition.org).
   The native functions can be accessed, e.g., using the 
@@ -33,7 +33,7 @@ This project contains of two modules:
   ```
   
 - **cryptominisat4j**: This module provides Java bindings for the native library using the 
-[IPASIR4J library](https://github.com/liveontologies/ipasir4j) -- a Java analogue of
+[IPASIR4J library](https://github.com/liveontologies/ipasir4j) -- a Java version of
 the [IPASIR C library](https://github.com/biotomas/ipasir). To use this library
 add the following maven dependency:
 	```
@@ -48,10 +48,10 @@ The native library `cryptominisat` for the current platform will be automaticall
 a compile/runtime dependency. To include the library dependencies for all available 
 platforms set a system property `multi-platform`, e.g., by adding a switch 
 `-Dmulti-platform` to the maven command. This may be desirable, e.g., for creating
-platform-independent "standalone" jars.
+platform-independent "stand-alone" jars.
 
 To use snapshots versions of this library (if not compiled from sources), please add
-the sonatype shanpshot repository either to your `pom.xml` or `settings.xml`:
+the sonatype snapshot repository either to your `pom.xml` or `settings.xml`:
 ```
 <repositories>
   <repository>
