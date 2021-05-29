@@ -31,9 +31,9 @@
 	<url>https://github.com/liveontologies/${project.artifactId}</url>
 
 	<scm>
-		<connection>scm:git:https://github.com/liveontologies/${project.artifactId}.git</connection>
-		<developerConnection>scm:git:git@github.com:liveontologies/${project.artifactId}.git</developerConnection>
-		<url>https://github.com/liveontologies/${project.artifactId}</url>
+		<connection>scm:git:https://github.com/liveontologies/cryptominisat4j.git</connection>
+		<developerConnection>scm:git:git@github.com:liveontologies/cryptominisat4j.git</developerConnection>
+		<url>https://github.com/liveontologies/cryptominisat4j</url>
 		<tag>HEAD</tag>
 	</scm>
 
