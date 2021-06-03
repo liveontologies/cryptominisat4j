@@ -31,7 +31,9 @@ ifeq ($(origin CXX),default)
 export CXX		= g++
 endif
 export AR		?= ar
-export CFLAGS	?= -Wall -DNDEBUG -O3 -fPIC
+# to build universal binary on MacOS, we switch ar rc -> -static -o  
+AR += rc
+export CXXFLAGS	+= -Wall -DNDEBUG -O3 -fPIC
 
 #-----------------------------------------------------------------------#
 #- REQUIRED TOP RULES --------------------------------------------------#
@@ -75,20 +77,23 @@ endif
 UNAME ?= $(shell uname -s)
 
 # the build static library
-CMSLIB = $(DIR)/build/lib/libcryptominisat5.a
+STLIB = $(DIR)/build/lib/libipasircryptominisat5.a
 # the build glue object file implementing the ipasir interface
-IPASIRGLUEOBJ=$(DIR)/build/cmsat5-src/CMakeFiles/ipasircryptominisat5.dir/ipasir.cpp.o
+IPASIRPATH=$(DIR)/build/cmsat5-src/CMakeFiles/ipasircryptominisat5.dir/
+IPASIRGLUEOBJ=$(IPASIRPATH)/ipasir.cpp.o
 
 ifeq ($(UNAME), Darwin)
  	DLIB = lib$(NAME).dylib
+ 	# build universal "fat" binaries
+ 	CMAKE_OPTIONS = -D CMAKE_OSX_ARCHITECTURES='x86_64;arm64'
+ 	CFLAGS += -arch x86_64 -arch arm64
+ 	AR = libtool -static -o
 else ifeq ($(UNAME), Linux)
  	DLIB = lib$(NAME).so
 else ifeq ($(UNAME), mingw32)
  	DLIB = $(NAME).dll  
  	CMAKE_OPTIONS=-D CMAKE_SYSTEM_NAME=Windows
- 	# different file names for windows
- 	CMSLIB = $(DIR)/build/lib/libcryptominisat5win.a  
- 	IPASIRGLUEOBJ=$(DIR)/build/cmsat5-src/CMakeFiles/ipasircryptominisat5.dir/ipasir.cpp.obj  
+ 	IPASIRGLUEOBJ=$(IPASIRPATH)/ipasir.cpp.obj  
 else
  	$(error Platform not supported: $(UNAME))
 endif 
@@ -97,32 +102,23 @@ dlib: $(DLIB)
 
 
 # shared library for Mac OS
-lib$(NAME).dylib: libipasir$(SIG).a
+lib$(NAME).dylib: $(STLIB)
 	$(VB) $(CXX) $(CFLAGS) -g -I. -o $@ $(IPASIRGLUEOBJ) $^ -dynamiclib -install_name $@ 
 
 # shared library for Linux
-lib$(NAME).so: libipasir$(SIG).a
+lib$(NAME).so: $(STLIB)
 	$(VB) $(CXX) -o $@ $(IPASIRGLUEOBJ) $^ $(CFLAGS) -g -I. -shared -Wl,-soname,$@ 
 
 # shared library for MinGW
-$(NAME).dll: libipasir$(SIG).a	 	
+$(NAME).dll: $(STLIB)	 	
 	$(VB) $(CXX) -o $@ $(IPASIRGLUEOBJ) $^ $(CFLAGS) -static-libgcc -static-libstdc++ -g -I. -shared -Wl,--subsystem,windows -Wl,-Bstatic -lstdc++ -lpthread
 
-# static library with the glue code
-libipasir$(SIG).a: lib$(SIG).a
-	@#
-	@# merge library and glue code into target
-	@#
-	$(VB) cp lib$(SIG).a $@
-	$(VB) $(AR) r $@ $(IPASIRGLUEOBJ)
-
 # static solver library
-lib$(SIG).a: $(DIR)
+$(STLIB): $(DIR)
 	@#
 	@# configure and build library
 	@#
-	cd $(DIR); sh ../build.sh $(CMAKE_OPTIONS)	
-	cp $(CMSLIB) $@
+	cd $(DIR); sh ../build.sh $(CMAKE_OPTIONS)
 
 
 $(DIR): $(ARCHIVE).tar.gz
