@@ -1,19 +1,94 @@
 version: '{build}'
-image: Visual Studio 2017
-clone_depth: 3 
+clone_depth: 3
 environment:
+  JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
+  compile_options: -B -P ${job_name}
+  deploy_options: -B -pl !cryptominisat4j -P ${job_name}  
   matrix:
-    - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
-    - JAVA_HOME: C:\Program Files (x86)\Java\jdk1.8.0
-    - JAVA_HOME: C:\Program Files\Java\jdk11
-    - JAVA_HOME: C:\Program Files\Java\jdk13
+    - job_name: linux-x86-64
+      job_group: jnalib
+      appveyor_build_worker_image: Ubuntu  
+      DEPLOY: 1
+    - job_name: i686-w64-mingw32
+      job_group: jnalib
+      appveyor_build_worker_image: Ubuntu
+      DEPLOY: 1
+    - job_name: x86_64-w64-mingw32
+      job_group: jnalib
+      appveyor_build_worker_image: Ubuntu
+      DEPLOY: 1
+    - job_name: darwin
+      job_group: jnalib
+      appveyor_build_worker_image: macos
+      DEPLOY: 1    
+    - job_name: java8-win-x64-deploy
+      job_group: java
+      job_depends_on: jnalib
+      appveyor_build_worker_image: Visual Studio 2017
+      JAVA_HOME: C:\Program Files\Java\jdk1.8.0
+      DEPLOY: 1
+    - job_name: java8-win-x86
+      job_group: java
+      job_depends_on: jnalib
+      appveyor_build_worker_image: Visual Studio 2017      
+      JAVA_HOME: C:\Program Files (x86)\Java\jdk1.8.0
+    - job_name: java11-win-x64
+      job_group: java
+      job_depends_on: jnalib
+      appveyor_build_worker_image: Visual Studio 2017      
+      JAVA_HOME: C:\Program Files\Java\jdk11
+    - job_name: java16-win-x64
+      job_group: java
+      job_depends_on: jnalib
+      appveyor_build_worker_image: Visual Studio 2019      
+      JAVA_HOME: C:\Program Files\Java\jdk16
+  OSSRH_USERNAME:
+    secure: 64k8xKR++oDsn//bh82FAg==
+  OSSRH_PASSWORD:
+    secure: zcn8sBdPWDa/IVJr+uwUYDkH0YXufEkx9TZendXeu1Y=
+matrix:
+  fast_finish: true
 install:
-  - cmd: SET PATH=%JAVA_HOME%\bin;%PATH%
-build_script:
   - bash -c "mkdir -p $HOME/.m2"
-  - bash -c "cp -f .settings.xml $HOME/.m2/settings.xml"
-  - mvn install -DskipTests=true -U -pl !cryptominisat
+  - bash -c "cp -f .settings.xml $HOME/.m2/settings.xml"  
+build: Script
+build_script:
+  - bash -c "mvn install -DskipTests=true -U ${compile_options}"
 test_script:
-  - mvn test -Dassembly.skipAssembly=true -B -pl !cryptominisat
+  - bash -c "mvn test -Dassembly.skipAssembly=true ${compile_options}"
+deploy_script:
+  - bash -c "if [ ${DEPLOY} ]; then mvn source:jar deploy -DskipTests=true ${deploy_options}; fi" 
 cache:
-  - C:\Users\appveyor\.m2
+  - $HOME/.m2/    
+for:
+  -
+    matrix:
+      only:
+        - job_name: darwin
+    environment:    
+      HOMEBREW_NO_AUTO_UPDATE: 1
+      HOMEBREW_NO_INSTALL_CLEANUP: 1
+      JAVA_HOME:
+    init:
+      - brew install maven wget
+      - sudo mv /Library/Developer/CommandLineTools/SDKs /tmp/
+  -
+    matrix:
+      only:
+        - job_name: i686-w64-mingw32
+        - job_name: x86_64-w64-mingw32
+    environment:
+      compile_options: ${deploy_options}
+    init:
+      - sudo apt-get install mingw-w64 -y -qq
+  -
+    matrix:
+      only:
+        - job_group: java
+    environment:
+      compile_options: -B -pl !cryptominisat -P multi-platform
+      deploy_options: ${compile_options}
+    init:
+      - cmd: SET PATH=%JAVA_HOME%\bin;%PATH%    
+    cache:
+      - C:\Users\appveyor\.m2
