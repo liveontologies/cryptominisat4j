@@ -23,8 +23,8 @@ package com.github.liveontologies.ipasir4j.cryptominisat;
  */
 
 import com.github.liveontologies.ipasir4j.IpasirSolver;
-import com.github.liveontologies.ipasir4j.jna.JNAIpasir;
 import com.github.liveontologies.ipasir4j.jna.IpasirNativeSolver;
+import com.github.liveontologies.ipasir4j.jna.JNAIpasir;
 import com.sun.jna.Native;
 
 public class Cryptominisat {
@@ -32,6 +32,16 @@ public class Cryptominisat {
 	private final static JNAIpasir CRYPTOMINISAT_JNA = Native
 			.load("cryptominisat", JNAIpasir.class);
 
+	/**
+	 * @return the name and the version of the incremental SAT solving library
+	 */
+	public static String getSignature() {
+		return CRYPTOMINISAT_JNA.ipasir_signature();
+	}
+
+	/**
+	 * @return a new solver instance
+	 */
 	public static IpasirSolver createSolver() {
 		return new IpasirNativeSolver(CRYPTOMINISAT_JNA);
 	}
