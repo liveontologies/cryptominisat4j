@@ -11,11 +11,11 @@ environment:
       DEPLOY: 1
     - job_name: i686-w64-mingw32
       job_group: jnalib
-      appveyor_build_worker_image: Ubuntu
+      appveyor_build_worker_image: Ubuntu2004
       DEPLOY: 1
     - job_name: x86_64-w64-mingw32
       job_group: jnalib
-      appveyor_build_worker_image: Ubuntu
+      appveyor_build_worker_image: Ubuntu2004
       DEPLOY: 1
     - job_name: darwin
       job_group: jnalib
@@ -24,24 +24,24 @@ environment:
     - job_name: java8-win-x64-deploy
       job_group: java
       job_depends_on: jnalib
-      appveyor_build_worker_image: Visual Studio 2017
+      appveyor_build_worker_image: Visual Studio 2019
       JAVA_HOME: C:\Program Files\Java\jdk1.8.0
       DEPLOY: 1
     - job_name: java8-win-x86
       job_group: java
       job_depends_on: jnalib
-      appveyor_build_worker_image: Visual Studio 2017      
+      appveyor_build_worker_image: Visual Studio 2019      
       JAVA_HOME: C:\Program Files (x86)\Java\jdk1.8.0
     - job_name: java11-win-x64
       job_group: java
       job_depends_on: jnalib
-      appveyor_build_worker_image: Visual Studio 2017      
+      appveyor_build_worker_image: Visual Studio 2019      
       JAVA_HOME: C:\Program Files\Java\jdk11
-    - job_name: java16-win-x64
+    - job_name: java17-win-x64
       job_group: java
       job_depends_on: jnalib
       appveyor_build_worker_image: Visual Studio 2019      
-      JAVA_HOME: C:\Program Files\Java\jdk16
+      JAVA_HOME: C:\Program Files\Java\jdk17
 matrix:
   fast_finish: true
 install:
